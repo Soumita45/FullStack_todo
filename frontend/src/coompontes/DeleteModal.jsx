@@ -1,6 +1,20 @@
+import axios from 'axios'
 import React from 'react'
 
-const DeleteModal = ({onConfirm,onCancel}) => {
+const DeleteModal = ({setDelModel,todoId,getAll}) => {
+
+     const deleteTodo = async () => {
+        try {
+            console.log(todoId)
+            const res = await axios.delete(`http://localhost:8001/todo/delete/${todoId}`)
+            console.log(res)
+            setDelModel(false)
+            getAll()
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
@@ -13,7 +27,7 @@ const DeleteModal = ({onConfirm,onCancel}) => {
                 <div className="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
                     <div className="w-full py-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto max-w-sm">
                         <button
-                            onClick={onCancel}
+                            onClick={()=>setDelModel(false)}
                             tabIndex={-1}
                             type="button"
                             className="absolute top-2 right-2 rtl:right-auto rtl:left-2"
@@ -56,7 +70,7 @@ const DeleteModal = ({onConfirm,onCancel}) => {
                             <div className="px-6 py-2">
                                 <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
                                     <button
-                                        onClick={onCancel}
+                                        onClick={()=>setDelModel(false)}
                                         type="button"
                                         className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
                                     >
@@ -66,7 +80,7 @@ const DeleteModal = ({onConfirm,onCancel}) => {
                                     </button>
                                     <button
                                         type="submit"
-                                        onClick={onConfirm}
+                                        onClick={deleteTodo}
                                         className="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-600 hover:bg-red-500 focus:bg-red-700 focus:ring-offset-red-700"
                                     >
                                         <span className="flex items-center gap-1">

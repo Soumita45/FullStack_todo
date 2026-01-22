@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
+import DeleteModal from './DeleteModal'
+import { useNavigate } from 'react-router-dom'
 
-const Card = ({ title, handleDelete,id,handleEdit }) => {
-  
-const handleEditClick = () => {
-    handleEdit({
-      _id: id,
-      title: title
-    })
-  }
+const Card = ({ title, getAll, id }) => {
+
+  const [delModel, setDelModel] = useState(false)
+  const [todoId, setTodoId] = useState()
+  const navigate = useNavigate()
   return (
     <>
       <div className="flex justify-center">
@@ -17,17 +16,18 @@ const handleEditClick = () => {
               {title}
             </h2>
             <div className="flex gap-3">
-              <button onClick={handleEditClick}
-              className="bg-green-500 text-white px-1 py-1 rounded-lg hover:bg-green-600 transition">
+              <button onClick={() => navigate(`update/${id}`, { state: { title } })}
+                className="bg-green-500 text-white px-1 py-1 rounded-lg hover:bg-green-600 transition">
                 Edit
               </button>
-              <button onClick={() => handleDelete(id)}
+              <button onClick={() => { setDelModel(true); setTodoId(id) }}
                 className="bg-red-500 text-white px-1 py-1 rounded-lg hover:bg-red-600 transition ">
                 Delete
               </button>
             </div>
           </div>
         </div>
+        {delModel && <DeleteModal setDelModel={setDelModel} todoId={todoId} getAll={getAll} />}
       </div>
     </>
   )

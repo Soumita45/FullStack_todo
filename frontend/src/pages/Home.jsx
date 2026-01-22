@@ -11,11 +11,6 @@ const Home = () => {
     const [text, setText] = useState("")
     const [flag, setFlag] = useState(false)
 
-    const [showDelTodo, setShowDelTodo] = useState(false)
-    const [todoToDelete, setTodoToDelete] = useState(null)
-
-    const [showEditTodo, setShowEditTodo] = useState(false)
-    const [todoToEdit, setTodoToEdit] = useState(null)
 
     const getAll = async () => {
         try {
@@ -44,56 +39,7 @@ const Home = () => {
 
     }
 
-    const handleDelete = (id) => {
-        setShowDelTodo(true)
-        setTodoToDelete(id)
-
-    }
-
-    const onConfirm = async (id) => {
-        try {
-            setFlag(false)
-            await axios.delete(`http://localhost:8001/todo/delete/${id}`)
-            setFlag(true)
-            setShowDelTodo(false)
-            setTodoToDelete(null)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const onCancel = async () => {
-        setShowDelTodo(false)
-        setTodoToDelete(null)
-
-    }
-
-    
-    const handleEdit = async (todo) => {
-        setShowEditTodo(true)
-        setTodoToEdit(todo)
-    }
-
-    const onSave = async (id, newText) => {
-        const data = {
-            "title": newText
-        }
-        try {
-            setFlag(false)
-            await axios.put(`http://localhost:8001/todo/update/${id}`, data)
-            setFlag(true)
-            setShowEditTodo(false)
-            setTodoToEdit(null)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const onCancelEdit = async () => {
-        setShowEditTodo(false)
-        setTodoToEdit(null)
-    }
-
+   
     useEffect(() => {
         getAll()
     }, [flag])
@@ -108,11 +54,9 @@ const Home = () => {
                     <button onClick={() => handleTodo(text)} className='bg-blue-500 p-2 text-white'>Add</button>
 
                 </div>
-                <MainSection todo={todo} handleDelete={handleDelete} handleEdit={handleEdit} />
+                <MainSection todo={todo} getAll={getAll}/>
                 <Footer />
             </div>
-            {showDelTodo && <DeleteModal onConfirm={() => onConfirm(todoToDelete)} onCancel={onCancel} />}
-            {showEditTodo && <UpdateModal onCancleEdit={onCancelEdit} onSave={onSave}  currentText={todoToEdit.title}  id={todoToEdit._id}/>}
         </div>
     )
 }
